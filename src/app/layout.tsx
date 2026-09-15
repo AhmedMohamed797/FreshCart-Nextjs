@@ -1,5 +1,9 @@
+import Providers from "@/components/Providers/Providers";
+import Footer from "@/components/shared/Footer";
+import Navbar from "@/components/shared/Navbar";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
 import "../styles/globals.css";
 
 const geistSans = Geist({
@@ -24,7 +28,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Navbar />
+        <Providers>
+          {children}
+
+          <Toaster richColors theme="system" position="top-right" />
+        </Providers>
+        <Footer />
+      </body>
     </html>
   );
 }

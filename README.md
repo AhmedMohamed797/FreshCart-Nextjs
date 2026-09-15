@@ -3,14 +3,14 @@
 ## Dependencies
 
 [✅] Style => Tailwind
-[✅] Icons => font-awesome
+[✅] Icons => Tabler
 [✅] Fonts => Next => has text optimization
 [✅] APIs => axios
 [✅] Forms => react-hook-form
 [✅] Validation => zod
 [✅] Client state management => Redux
 [✅] Server state management => tanstack-query
-[✅] Toast => react-toastify
+[✅] Toast => sonner
 
 ## Pages
 
