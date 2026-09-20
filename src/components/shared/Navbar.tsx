@@ -1,5 +1,8 @@
 "use client";
 
+import { removeToken } from "@/features/auth/server/auth.actions";
+import { authActions } from "@/features/auth/slices/auth.slice";
+import { appState } from "@/store/store";
 import {
   IconBabyCarriage,
   IconChevronDown,
@@ -20,9 +23,25 @@ import {
 } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 import logo from "../../assets/images/freshcart-logo.svg";
 
 export default function Navbar() {
+  const { isAuthenticated } = useSelector(
+    (appState: appState) => appState.authReducer,
+  );
+
+  const { logOut } = authActions;
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleLogOut = async () => {
+    dispatch(logOut());
+    await removeToken();
+    router.push("/login");
+  };
+
   return (
     <>
       <header>
@@ -113,40 +132,49 @@ export default function Navbar() {
                 </Link>
               </li>
 
-              <li>
-                <Link
-                  href={`/account`}
-                  className={`flex flex-col gap-2 items-center`}
-                >
-                  <IconUser stroke={2} />
-                  <span className="text-sm">Account</span>
-                </Link>
-              </li>
-
-              <li className="flex flex-col gap-2 cursor-pointer">
-                <IconLogout stroke={2} />
-                <span className="text-sm">Logout</span>
-              </li>
-
-              <li>
-                <Link
-                  href={`/signup`}
-                  className={`flex flex-col gap-2 items-center`}
-                >
-                  <IconUserPlus stroke={2} />
-                  <span className="text-sm">Signup</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href={`/login`}
-                  className={`flex flex-col gap-2 items-center`}
-                >
-                  <IconId stroke={2} />
-                  <span className="text-sm">Login</span>
-                </Link>
-              </li>
+              {isAuthenticated ? (
+                <>
+                  {" "}
+                  <li>
+                    <Link
+                      href={`/profile`}
+                      className={`flex flex-col gap-2 items-center`}
+                    >
+                      <IconUser stroke={2} />
+                      <span className="text-sm">Account</span>
+                    </Link>
+                  </li>
+                  <li
+                    onClick={handleLogOut}
+                    className="flex flex-col gap-2 cursor-pointer"
+                  >
+                    <IconLogout stroke={2} />
+                    <span className="text-sm">Logout</span>
+                  </li>
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <li>
+                    <Link
+                      href={`/signup`}
+                      className={`flex flex-col gap-2 items-center`}
+                    >
+                      <IconUserPlus stroke={2} />
+                      <span className="text-sm">Signup</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href={`/login`}
+                      className={`flex flex-col gap-2 items-center`}
+                    >
+                      <IconId stroke={2} />
+                      <span className="text-sm">Login</span>
+                    </Link>
+                  </li>
+                </>
+              )}
             </menu>
           </nav>
         </div>
@@ -168,7 +196,7 @@ export default function Navbar() {
                   >
                     <IconUser stroke={2} />
 
-                    <span>Men's Fashion</span>
+                    <span>Men&apos;s Fashion</span>
                   </Link>
                 </li>
 
@@ -179,7 +207,7 @@ export default function Navbar() {
                   >
                     <IconShirtSport stroke={2} />
 
-                    <span>Women's Fashion</span>
+                    <span>Women&apos;s Fashion</span>
                   </Link>
                 </li>
 
