@@ -20,10 +20,12 @@ import {
   IconShoppingCart,
   IconUser,
   IconUserPlus,
+  IconX,
 } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../../assets/images/freshcart-logo.svg";
 
@@ -35,10 +37,16 @@ export default function Navbar() {
   const { logOut } = authActions;
   const dispatch = useDispatch();
   const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
 
   const handleLogOut = async () => {
     dispatch(logOut());
     await removeToken();
+    closeMobileMenu();
     router.push("/login");
   };
 
@@ -101,8 +109,15 @@ export default function Navbar() {
               <IconSearch stroke={2} />
             </search>
 
-            <button className="lg:hidden btn size-10 flex justify-center items-center bg-primary-600 text-white">
-              <IconMenu2 stroke={2} />
+            <button
+              type="button"
+              className="lg:hidden btn flex justify-center items-center bg-primary-600 text-white"
+              aria-label="Open menu"
+              aria-controls="mobile-menu"
+              aria-expanded={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <IconMenu2 stroke={1} size={20}/>
             </button>
 
             <menu className="hidden lg:flex gap-6 *:hover:text-primary-500 *:transition-colors *:duration-200">
@@ -302,23 +317,30 @@ export default function Navbar() {
           </div>
         </nav>
 
-        {/* <>
-            <div
+        {isMobileMenuOpen && (
+          <>
+            <button
+              type="button"
               className="fixed inset-0 bg-black/50 z-40"
-            ></div>
+              aria-label="Close menu"
+              onClick={closeMobileMenu}
+            />
 
             <div
-              className={`offcanvas p-5 fixed w-80 top-0 bottom-0 left-0 bg-white shadow-xl z-50 overflow-y-auto flex flex-col`}
+              id="mobile-menu"
+              className="offcanvas p-5 fixed w-80 max-w-[85vw] top-0 bottom-0 left-0 bg-white shadow-xl z-50 overflow-y-auto flex flex-col"
             >
               <div className="flex justify-between items-center border-b border-gray-200 pb-4">
                 <div className="logo">
                   <Image src={logo} alt="FreshCart" className="h-10" />
                 </div>
                 <button
+                  type="button"
                   className="btn p-2 rounded-full hover:bg-gray-100"
                   aria-label="Close menu"
+                  onClick={closeMobileMenu}
                 >
-                  <FontAwesomeIcon icon={faXmark} className="text-xl" />
+                  <IconX stroke={2} className="text-xl" />
                 </button>
               </div>
               <div className="relative my-4">
@@ -327,8 +349,8 @@ export default function Navbar() {
                   className="form-control w-full border-2 py-2 pl-3 pr-10 rounded-lg"
                   placeholder="Search for products ..."
                 />
-                <FontAwesomeIcon
-                  icon={faSearch}
+                <IconSearch
+                  stroke={2}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
                 />
               </div>
@@ -338,23 +360,22 @@ export default function Navbar() {
               <ul className="space-y-3 border-b border-gray-200 pb-4">
                 <li>
                   <Link
-                    className={`flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100`}
+                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
                     href={`/wishlist`}
+                    onClick={closeMobileMenu}
                   >
-                    <FontAwesomeIcon icon={faHeart} className="text-lg" />
+                    <IconHeart stroke={2} className="text-lg" />
                     <span className="font-medium">Wishlist</span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    className={`flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100`}
+                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
                     href={`/cart`}
+                    onClick={closeMobileMenu}
                   >
                     <div className="relative">
-                      <FontAwesomeIcon
-                        icon={faShoppingCart}
-                        className="text-lg"
-                      />
+                      <IconShoppingCart stroke={2} className="text-lg" />
                       <span className="absolute -top-1 -right-1 size-4 rounded-full bg-primary-600 text-white text-xs flex justify-center items-center">
                         {0}
                       </span>
@@ -362,59 +383,62 @@ export default function Navbar() {
                     <span className="font-medium">Cart</span>
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    className={`flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100`}
-                    href={`/account`}
-                  >
-                    <FontAwesomeIcon icon={faUser} className="text-lg" />
-                    <span className="font-medium">Account</span>
-                  </Link>
-                </li>
+                {isAuthenticated && (
+                  <li>
+                    <Link
+                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                      href={`/profile`}
+                      onClick={closeMobileMenu}
+                    >
+                      <IconUser stroke={2} className="text-lg" />
+                      <span className="font-medium">Account</span>
+                    </Link>
+                  </li>
+                )}
               </ul>
               <h2 className="text-lg font-semibold mt-4 mb-2 text-gray-800">
                 Account
               </h2>
               <ul className="space-y-3">
+                {isAuthenticated ? (
                   <li>
                     <button
+                      type="button"
                       className="flex w-full items-center gap-3 p-2 rounded-lg hover:bg-gray-100 text-left"
+                      onClick={handleLogOut}
                     >
-                      <FontAwesomeIcon
-                        icon={faSignOutAlt}
-                        className="text-lg"
-                      />
+                      <IconLogout stroke={2} className="text-lg" />
                       <span className="font-medium">Logout</span>
                     </button>
                   </li>
-                
-                
+                ) : (
+                  <>
                     <li>
                       <Link
                         href={`/signup`}
-                        className={`flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100`}
+                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                        onClick={closeMobileMenu}
                       >
-                        <FontAwesomeIcon
-                          icon={faUserPlus}
-                          className="text-lg"
-                        />
+                        <IconUserPlus stroke={2} className="text-lg" />
                         <span className="font-medium">Signup</span>
                       </Link>
                     </li>
                     <li>
                       <Link
                         href={`/login`}
-                        className={`flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100`}
+                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                        onClick={closeMobileMenu}
                       >
-                        <FontAwesomeIcon icon={faIdCard} className="text-lg" />
+                        <IconId stroke={2} className="text-lg" />
                         <span className="font-medium">Login</span>
                       </Link>
                     </li>
-                 
-              
+                  </>
+                )}
               </ul>
             </div>
-          </>  */}
+          </>
+        )}
       </header>
     </>
   );
