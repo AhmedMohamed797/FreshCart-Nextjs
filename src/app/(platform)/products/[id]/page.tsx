@@ -1,3 +1,11 @@
-export default function ProductDetailsPage() {
-  return <div>ProductDetails Page</div>;
+import ProductDetails from "@/features/products/screens/ProductDetails";
+
+export default async function ProductDetailsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return <ProductDetails id={id} />;
 }
