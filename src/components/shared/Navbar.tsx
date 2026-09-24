@@ -106,7 +106,7 @@ export default function Navbar() {
                 className="form-control w-96"
                 placeholder="Search for products ..."
               />
-              <IconSearch stroke={2} />
+              <IconSearch className="absolute right-1 top-1/2 -translate-1/2" stroke={2} />
             </search>
 
             <button
@@ -117,7 +117,7 @@ export default function Navbar() {
               aria-expanded={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(true)}
             >
-              <IconMenu2 stroke={1} size={20}/>
+              <IconMenu2 stroke={1} size={20} />
             </button>
 
             <menu className="hidden lg:flex gap-6 *:hover:text-primary-500 *:transition-colors *:duration-200">
@@ -346,7 +346,7 @@ export default function Navbar() {
               <div className="relative my-4">
                 <input
                   type="text"
-                  className="form-control w-full border-2 py-2 pl-3 pr-10 rounded-lg"
+                  className="form-control relative w-full border-2 py-2 pl-3 pr-10 rounded-lg"
                   placeholder="Search for products ..."
                 />
                 <IconSearch
