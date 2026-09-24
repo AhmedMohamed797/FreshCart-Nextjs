@@ -67,3 +67,24 @@
 .swiper-pagination-bullet-active {
   @apply w-6! rounded-full! bg-white!;
 }
+
+/*& Image Gallery Styles */
+.image-gallery-thumbnail {
+  @apply hover:border-primary-600! rounded-md border-2!;
+}
+
+.image-gallery-thumbnail.active,
+.image-gallery-thumbnail:focus {
+  outline: none;
+  @apply border-primary-600! rounded-md border-2!;
+}
+
+/* Adjust thumbnail height */
+.image-gallery-thumbnail-image {
+  @apply h-27 object-contain;
+}
+
+/* Adjust original image height */
+.image-gallery-slide img {
+  @apply h-112.5 object-contain;
+}
