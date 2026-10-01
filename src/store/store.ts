@@ -1,14 +1,17 @@
 import { authReducer, InitialState } from "@/features/auth/slices/auth.slice";
+import { cartReducer, CartValuesType } from "@/features/cart/slices/cart.slice";
 import { configureStore } from "@reduxjs/toolkit";
 
 export type PreloadedState = {
   authReducer: InitialState;
+  cartReducer: CartValuesType;
 };
 
 export function createStore(preloadedState: PreloadedState) {
   const store = configureStore({
     reducer: {
       authReducer,
+      cartReducer,
     },
     preloadedState,
   });

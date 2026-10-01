@@ -34,6 +34,10 @@ export default function Navbar() {
     (appState: appState) => appState.authReducer,
   );
 
+  const { numOfCartItems } = useSelector(
+    (appState: appState) => appState.cartReducer,
+  );
+
   const { logOut } = authActions;
   const dispatch = useDispatch();
   const router = useRouter();
@@ -106,7 +110,10 @@ export default function Navbar() {
                 className="form-control w-96"
                 placeholder="Search for products ..."
               />
-              <IconSearch className="absolute right-1 top-1/2 -translate-1/2" stroke={2} />
+              <IconSearch
+                className="absolute right-1 top-1/2 -translate-1/2"
+                stroke={2}
+              />
             </search>
 
             <button
@@ -140,7 +147,7 @@ export default function Navbar() {
                     <IconShoppingCart stroke={2} />
 
                     <span className="absolute top-0 -right-0.5 -translate-y-1/2 size-4.5 rounded-full bg-primary-600 text-white text-xs flex justify-center items-center">
-                      0
+                      {numOfCartItems}
                     </span>
                   </div>
                   <span className="text-sm">Cart</span>
@@ -377,7 +384,7 @@ export default function Navbar() {
                     <div className="relative">
                       <IconShoppingCart stroke={2} className="text-lg" />
                       <span className="absolute -top-1 -right-1 size-4 rounded-full bg-primary-600 text-white text-xs flex justify-center items-center">
-                        {0}
+                        {numOfCartItems}
                       </span>
                     </div>
                     <span className="font-medium">Cart</span>

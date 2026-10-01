@@ -1,7 +1,13 @@
+"use client";
+
 import Rating from "@/components/shared/Rating";
+import { addProductToCart } from "@/features/cart/server/cart.server";
+import { cartActions } from "@/features/cart/slices/cart.slice";
 import { IconEye, IconHeart, IconPlus } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 import { Product } from "../types/products.types";
 import { calcDiscount } from "../utils/calcDiscount";
 
@@ -16,6 +22,23 @@ export default function ProductCard({ productInfo }: { productInfo: Product }) {
     title,
     priceAfterDiscount,
   } = productInfo;
+
+  const { setCartInfo } = cartActions;
+  const dispatch = useDispatch();
+
+  async function handleAddProductToCart() {
+    const response = await addProductToCart(id);
+
+    if (response.status === "fail" || response.status === "error") {
+      toast.error(response.message);
+      return;
+    }
+
+    if (response.status === "success") {
+      dispatch(setCartInfo(response));
+      toast.success(response.message);
+    }
+  }
 
   return (
     <>
@@ -68,7 +91,10 @@ export default function ProductCard({ productInfo }: { productInfo: Product }) {
               )}
             </div>
 
-            <button className="btn hover:bg-primary-700 flex justify-center items-center bg-primary-600 size-9 rounded-full p-0 text-white">
+            <button
+              onClick={handleAddProductToCart}
+              className="btn hover:bg-primary-700 flex justify-center items-center bg-primary-600 size-9 rounded-full p-0 text-white"
+            >
               <IconPlus stroke={2} />
             </button>
           </div>
