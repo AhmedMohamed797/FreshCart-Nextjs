@@ -2,6 +2,8 @@ import Providers from "@/components/Providers/Providers";
 import Footer from "@/components/shared/Footer";
 import Navbar from "@/components/shared/Navbar";
 import { verifyToken } from "@/features/auth/server/auth.actions";
+import { getCartItems } from "@/features/cart/server/cart.server";
+import { CartValuesType } from "@/features/cart/slices/cart.slice";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
@@ -26,13 +28,33 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const authStates = await verifyToken();
 
+  let cartValues: CartValuesType = {
+    message: "",
+    status: "success",
+    numOfCartItems: 0,
+    cartId: "",
+    data: {
+      products: [],
+      totalCartPrice: 0,
+    },
+  };
+
+  if (authStates.isAuthenticated) {
+    const cartResponse = await getCartItems();
+    if (cartResponse.status === "success") {
+      cartValues = cartResponse;
+    }
+  }
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Providers preloadedState={{ authReducer: authStates }}>
+        <Providers
+          preloadedState={{ authReducer: authStates, cartReducer: cartValues }}
+        >
           <Navbar />
           {children}
 
