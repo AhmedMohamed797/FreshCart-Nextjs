@@ -36,6 +36,16 @@ const cartSlice = createSlice({
         state.data = action.payload.data;
       }
     },
+    resetCart: (state) => {
+      state.status = "success";
+      state.message = "";
+      state.cartId = "";
+      state.numOfCartItems = 0;
+      state.data = {
+        products: [],
+        totalCartPrice: 0,
+      };
+    },
   },
 });
 
