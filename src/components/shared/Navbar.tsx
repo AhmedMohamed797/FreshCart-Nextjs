@@ -14,6 +14,7 @@ import {
   IconMenu2,
   IconPhone,
   IconProgressBolt,
+  IconReceipt2,
   IconReportMedical,
   IconSearch,
   IconShirtSport,
@@ -157,6 +158,15 @@ export default function Navbar() {
               {isAuthenticated ? (
                 <>
                   {" "}
+                  <li>
+                    <Link
+                      href={`/allorders`}
+                      className={`flex flex-col gap-2 items-center`}
+                    >
+                      <IconReceipt2 stroke={2} />
+                      <span className="text-sm">Orders</span>
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       href={`/profile`}
@@ -391,16 +401,28 @@ export default function Navbar() {
                   </Link>
                 </li>
                 {isAuthenticated && (
-                  <li>
-                    <Link
-                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
-                      href={`/profile`}
-                      onClick={closeMobileMenu}
-                    >
-                      <IconUser stroke={2} className="text-lg" />
-                      <span className="font-medium">Account</span>
-                    </Link>
-                  </li>
+                  <>
+                    <li>
+                      <Link
+                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                        href={`/allorders`}
+                        onClick={closeMobileMenu}
+                      >
+                        <IconReceipt2 stroke={2} className="text-lg" />
+                        <span className="font-medium">Orders</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                        href={`/profile`}
+                        onClick={closeMobileMenu}
+                      >
+                        <IconUser stroke={2} className="text-lg" />
+                        <span className="font-medium">Account</span>
+                      </Link>
+                    </li>
+                  </>
                 )}
               </ul>
               <h2 className="text-lg font-semibold mt-4 mb-2 text-gray-800">

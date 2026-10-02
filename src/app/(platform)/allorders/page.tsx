@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "View and track all your FreshCart orders.",
 };
 
-export default async function OrdersPage() {
+export default async function AllOrdersPage() {
   const response = await getUserOrders();
   const initialOrders =
     response.status === "success" && Array.isArray(response.data)
